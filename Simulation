@@ -5,9 +5,16 @@ import math
 
 # Number of sample heights
 N = 100
+
+# tank characteristics
 R = 0.6096
 L = 3.302
-LargeTankVolume = 3.854933213
+LargeTankVolume = math.pi * R * R * L
+
+# Statistics
+Mean = 0
+StandardDeviation = 0.05
+RandomArray = np.random.normal(Mean, StandardDeviation, N)
 
 # the cylinder tank
 # a vector that has all the heights of the cylindrical tank
@@ -20,16 +27,26 @@ BoxVolume = BoxHeights*1.5748*0.7366
 
 # the horizontal cylinder
 HorizontalCylinderHeights = np.linspace(0.0, 1.2192, N)
+HorizontalCylinderHeightsyaxis = np.linspace(0.0, 1.2192, N)
 HorizontalCylinderVolume = HorizontalCylinderHeights
 
-for i in range(len(HorizontalCylinderHeights)):
-    j = HorizontalCylinderHeights[i]
-    if i < N/2:
-        HorizontalCylinderVolume[i] = LargeTankVolume - 2 * math.acos((R - j) / R) + (R - j)*(math.sqrt(R * R - j * j))
+# enumerate makes 2 variables, i is the index, and j is the value inside the vector HorizontalCylinderHeights
+for i, j in enumerate(HorizontalCylinderHeights, start=0):
 
+    # if the tank is less than half empty one equation is used
+    if j < R:
+        AreaOfSector = math.pi*R*R*(math.acos((R-j)/R))/(2 * math.pi)
+        AreaOfTriangle = 0.5 * math.sqrt(R*R-(R-j)*(R-j))*(R-j)
+        HorizontalCylinderVolume[i] = (AreaOfSector - AreaOfTriangle) * L * 2
+        print(i, j, AreaOfSector, AreaOfTriangle)
+
+    # if the tank is more than half empty the other equation is used
     else:
-        HorizontalCylinderVolume[i] = LargeTankVolume / 2 - (
-                    (R - j) * math.sqrt(R * R - (j - R) * (j - R)) + 2 * math.acos((R - j) / R) * R * R) * L
+        AreaOfSector = math.pi * R * R * (math.acos((j - R) / R)) / (2 * math.pi)
+        AreaOfTriangle = 0.5 * math.sqrt(R * R - (j - R) * (j - R)) * (j - R)
+        HorizontalCylinderVolume[i] = LargeTankVolume - (AreaOfSector - AreaOfTriangle) * L * 2
+        print(i, j, AreaOfSector, AreaOfTriangle)
+
 
 # plots
 plt.subplot(131)
@@ -45,7 +62,7 @@ matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
 
 plt.subplot(133)
-plt.plot(HorizontalCylinderHeights,HorizontalCylinderVolume)
+plt.plot(HorizontalCylinderHeightsyaxis, HorizontalCylinderVolume, "o")
 matplotlib.pyplot.title("Horizontal Cylinder volume")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
