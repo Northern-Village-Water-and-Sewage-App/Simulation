@@ -25,8 +25,7 @@ HorizontalCylinderVolume = HorizontalCylinderHeights
 for i in range(len(HorizontalCylinderHeights)):
     j = HorizontalCylinderHeights[i]
     if i < N/2:
-        HorizontalCylinderVolume[i] = LargeTankVolume - 2 * math.acos((R - j) / R) + (R - j) * (
-            math.sqrt(R * R - j * j))
+        HorizontalCylinderVolume[i] = LargeTankVolume - 2 * math.acos((R - j) / R) + (R - j)*(math.sqrt(R * R - j * j))
 
     else:
         HorizontalCylinderVolume[i] = LargeTankVolume / 2 - (
@@ -36,14 +35,20 @@ for i in range(len(HorizontalCylinderHeights)):
 plt.subplot(131)
 plt.plot(CylinderHeights, CylinderVolume)
 matplotlib.pyplot.title("Cylinder volume")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
 
 plt.subplot(132)
 plt.plot(BoxHeights, BoxVolume)
 matplotlib.pyplot.title("Box volume")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
 
 plt.subplot(133)
 plt.plot(HorizontalCylinderHeights,HorizontalCylinderVolume)
 matplotlib.pyplot.title("Horizontal Cylinder volume")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
 
 plt.show()
 
