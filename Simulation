@@ -1,0 +1,49 @@
+import matplotlib
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+# Number of sample heights
+N = 100
+R = 0.6096
+L = 3.302
+LargeTankVolume = 3.854933213
+
+# the cylinder tank
+# a vector that has all the heights of the cylindrical tank
+CylinderHeights = np.linspace(0.0, 1.524, N)
+CylinderVolume = CylinderHeights*math.pi*0.762*0.762
+
+# the box tank
+BoxHeights = np.linspace(0.0, 1.6764, N)
+BoxVolume = BoxHeights*1.5748*0.7366
+
+# the horizontal cylinder
+HorizontalCylinderHeights = np.linspace(0.0, 1.2192, N)
+HorizontalCylinderVolume = HorizontalCylinderHeights
+
+for i in range(len(HorizontalCylinderHeights)):
+    j = HorizontalCylinderHeights[i]
+    if i < N/2:
+        HorizontalCylinderVolume[i] = LargeTankVolume - 2 * math.acos((R - j) / R) + (R - j) * (
+            math.sqrt(R * R - j * j))
+
+    else:
+        HorizontalCylinderVolume[i] = LargeTankVolume / 2 - (
+                    (R - j) * math.sqrt(R * R - (j - R) * (j - R)) + 2 * math.acos((R - j) / R) * R * R) * L
+
+# plots
+plt.subplot(131)
+plt.plot(CylinderHeights, CylinderVolume)
+matplotlib.pyplot.title("Cylinder volume")
+
+plt.subplot(132)
+plt.plot(BoxHeights, BoxVolume)
+matplotlib.pyplot.title("Box volume")
+
+plt.subplot(133)
+plt.plot(HorizontalCylinderHeights,HorizontalCylinderVolume)
+matplotlib.pyplot.title("Horizontal Cylinder volume")
+
+plt.show()
+
