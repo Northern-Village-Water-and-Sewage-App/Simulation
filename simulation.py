@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # Number of sample heights, needs to be a multiple of 10
-N: int = 100000
+N: int = 1000
 
 # tank characteristics
 R = 0.6096
@@ -68,11 +68,9 @@ def get_std_dvt(height):
 # single values added to vertical cylinder
 for k1, l1 in enumerate(CylinderHeights, start=0):
     CylinderVolumeWithError[k1] = CylinderVolume[k1] + np.random.normal(get_mean(l1), get_std_dvt(l1))
-
 # single values for box tank
 for k2, l2 in enumerate(BoxHeights, start=0):
     BoxVolumeWithError[k2] = BoxVolume[k2] + np.random.normal(get_mean(l2), get_std_dvt(l2))
-
 # single values for the horizontal tank
 for k3, l3 in enumerate(HorizontalCylinderHeights, start=0):
     HorizontalCylinderWithError[k3] = HorizontalCylinderVolume[k3] + np.random.normal(get_mean(l3), get_std_dvt(l3))
@@ -126,6 +124,90 @@ for av_i, av_j in enumerate(Average10Horizontal, start=0):
                                  + HorizontalCylinderWithError[av_i + 4] + HorizontalCylinderWithError[av_i + 5]
                                  + HorizontalCylinderWithError[av_i + 6] + HorizontalCylinderWithError[av_i + 7]
                                  + HorizontalCylinderWithError[av_i + 8] + HorizontalCylinderWithError[av_i + 9]) / 10
+
+# Min and max removed, plus the average of 3 and median of 5
+# create the vectors to hold results
+threeOf5Cylinder = np.zeros(int(N / 5))
+threeOf5Box = np.zeros(int(N / 5))
+threeOf5Horizontal = np.zeros(int(N / 5))
+medianOf5Cylinder = np.zeros(int(N / 5))
+medianOf5Box = np.zeros(int(N / 5))
+medianOf5Horizontal = np.zeros(int(N / 5))
+
+# Cylinder tank
+bubbleSort = np.zeros(5)
+for av_i, av_j in enumerate(threeOf5Cylinder, start=0):
+    # gets variables ready for bubble sorting
+    bubbleSort[0] = CylinderVolumeWithError[av_i]
+    bubbleSort[1] = CylinderVolumeWithError[av_i + 1]
+    bubbleSort[2] = CylinderVolumeWithError[av_i + 2]
+    bubbleSort[3] = CylinderVolumeWithError[av_i + 3]
+    bubbleSort[4] = CylinderVolumeWithError[av_i + 4]
+    # bubble sorts to get the values in order
+    for bi in bubbleSort:
+        for bj in range(0, int(4-bi)):
+            if bubbleSort[bj] > bubbleSort[bj + 1]:
+                bx = bubbleSort[bj]
+                bubbleSort[bj] = bubbleSort[bj + 1]
+                bubbleSort[bj + 1] = bx
+    # puts the average of the middle three, aka it removes the min and max and finds the average of the rest
+    threeOf5Cylinder[av_i] = (bubbleSort[2] + bubbleSort[3] + bubbleSort[4]) / 3
+    medianOf5Cylinder[av_i] = bubbleSort[3]
+for av_i, av_j in enumerate(threeOf5Cylinder, start=0):
+    # gets variables ready for bubble sorting
+    bubbleSort[0] = CylinderVolumeWithError[av_i]
+    bubbleSort[1] = CylinderVolumeWithError[av_i + 1]
+    bubbleSort[2] = CylinderVolumeWithError[av_i + 2]
+    bubbleSort[3] = CylinderVolumeWithError[av_i + 3]
+    bubbleSort[4] = CylinderVolumeWithError[av_i + 4]
+    # bubble sorts to get the values in order
+    for bi in bubbleSort:
+        for bj in range(0, int(4-bi)):
+            if bubbleSort[bj] > bubbleSort[bj + 1]:
+                bx = bubbleSort[bj]
+                bubbleSort[bj] = bubbleSort[bj + 1]
+                bubbleSort[bj + 1] = bx
+    # puts the average of the middle three, aka it removes the min and max and finds the average of the rest
+    threeOf5Cylinder[av_i] = (bubbleSort[2] + bubbleSort[3] + bubbleSort[4]) / 3
+    medianOf5Cylinder[av_i] = bubbleSort[3]
+
+# Box tank
+for av_i, av_j in enumerate(threeOf5Box, start=0):
+    # gets variables ready for bubble sorting
+    bubbleSort[0] = BoxVolumeWithError[av_i]
+    bubbleSort[1] = BoxVolumeWithError[av_i + 1]
+    bubbleSort[2] = BoxVolumeWithError[av_i + 2]
+    bubbleSort[3] = BoxVolumeWithError[av_i + 3]
+    bubbleSort[4] = BoxVolumeWithError[av_i + 4]
+    # bubble sorts to get the values in order
+    for bi in bubbleSort:
+        for bj in range(0, int(4-bi)):
+            if bubbleSort[bj] > bubbleSort[bj + 1]:
+                bx = bubbleSort[bj]
+                bubbleSort[bj] = bubbleSort[bj + 1]
+                bubbleSort[bj + 1] = bx
+    # puts the average of the middle three, aka it removes the min and max and finds the average of the rest
+    threeOf5Box[av_i] = (bubbleSort[2] + bubbleSort[3] + bubbleSort[4]) / 3
+    medianOf5Box[av_i] = bubbleSort[3]
+
+# Horizontal tank
+for av_i, av_j in enumerate(threeOf5Horizontal, start=0):
+    # gets variables ready for bubble sorting
+    bubbleSort[0] = HorizontalCylinderWithError[av_i]
+    bubbleSort[1] = HorizontalCylinderWithError[av_i + 1]
+    bubbleSort[2] = HorizontalCylinderWithError[av_i + 2]
+    bubbleSort[3] = HorizontalCylinderWithError[av_i + 3]
+    bubbleSort[4] = HorizontalCylinderWithError[av_i + 4]
+    # bubble sorts to get the values in order
+    for bi in bubbleSort:
+        for bj in range(0, int(4-bi)):
+            if bubbleSort[bj] > bubbleSort[bj + 1]:
+                bx = bubbleSort[bj]
+                bubbleSort[bj] = bubbleSort[bj + 1]
+                bubbleSort[bj + 1] = bx
+    # puts the average of the middle three, aka it removes the min and max and finds the average of the rest
+    threeOf5Horizontal[av_i] = (bubbleSort[2] + bubbleSort[3] + bubbleSort[4]) / 3
+    medianOf5Horizontal[av_i] = bubbleSort[3]
 
 
 
@@ -207,17 +289,63 @@ matplotlib.pyplot.title("Cylinder Average of 10")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
 
-# Box cylinder with errors
+# Box cylinderaverage of 10
 plt.subplot(132)
 plt.plot(BoxHeightsAvg10, Average10Box)
 matplotlib.pyplot.title("Box Average of 10")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
 
-# Horizontal Cylinder plot
+# Horizontal Cylinder average of 10
 plt.subplot(133)
 plt.plot(HorizontalCylinderHeightsAvg10, Average10Horizontal)
 matplotlib.pyplot.title("Horizontal Cylinder Average of 10")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# plots for best 3 of 5
+# the cylinder tank
+plt.figure(5)
+plt.subplot(131)
+plt.plot(CylinderHeightsAvg5, threeOf5Cylinder)
+matplotlib.pyplot.title("Best 3 of 5 Cylinder")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Box cylinderaverage of 10
+plt.subplot(132)
+plt.plot(BoxHeightsAvg5, threeOf5Box)
+matplotlib.pyplot.title("Best 3 of 5 Box")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Horizontal Cylinder average of 10
+plt.subplot(133)
+plt.plot(HorizontalCylinderHeightsAvg5, threeOf5Horizontal)
+matplotlib.pyplot.title("Best 3 of 5 Horizontal Cylinder")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# plots the median of 5
+# the cylinder tank median of 5
+plt.figure(6)
+plt.subplot(131)
+plt.plot(CylinderHeightsAvg5, medianOf5Cylinder)
+matplotlib.pyplot.title("Median of 5 Cylinder")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Box median of 5
+plt.subplot(132)
+plt.plot(BoxHeightsAvg5, medianOf5Box)
+matplotlib.pyplot.title("Median of 5 Box")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Horizontal Cylinder median of 5
+plt.subplot(133)
+plt.plot(HorizontalCylinderHeightsAvg5, medianOf5Horizontal)
+matplotlib.pyplot.title("Median of 5 C Horizontal Cylinder")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
 
