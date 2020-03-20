@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import math
 
 # Number of sample heights, needs to be a multiple of 10
-N = 10000
+N: int = 100000
 
 # tank characteristics
 R = 0.6096
@@ -14,20 +14,20 @@ LargeTankVolume = math.pi * R * R * L
 # the cylinder tank
 # a vector that has all the heights of the cylindrical tank
 CylinderHeights = np.linspace(0.0, 1.524, N)
-CylinderHeightsAvg5 = np.linspace(0.0, 1.524, int(N/5))
-CylinderHeightsAvg10 = np.linspace(0.0, 1.524, int(N/10))
+CylinderHeightsAvg5 = np.linspace(0.0, 1.524, int(N / 5))
+CylinderHeightsAvg10 = np.linspace(0.0, 1.524, int(N / 10))
 CylinderVolume = CylinderHeights * math.pi * 0.762 * 0.762
 
 # the box tank
 BoxHeights = np.linspace(0.0, 1.6764, N)
-BoxHeightsAvg5 = np.linspace(0.0, 1.6764, int(N/5))
-BoxHeightsAvg10 = np.linspace(0.0, 1.6764, int(N/10))
+BoxHeightsAvg5 = np.linspace(0.0, 1.6764, int(N / 5))
+BoxHeightsAvg10 = np.linspace(0.0, 1.6764, int(N / 10))
 BoxVolume = BoxHeights * 1.5748 * 0.7366
 
 # the horizontal cylinder
 HorizontalCylinderHeights = np.linspace(0.0, 1.2192, N)
-HorizontalCylinderHeightsAvg5 = np.linspace(0.0, 1.2192, int(N/5))
-HorizontalCylinderHeightsAvg10 = np.linspace(0.0, 1.2192, int(N/10))
+HorizontalCylinderHeightsAvg5 = np.linspace(0.0, 1.2192, int(N / 5))
+HorizontalCylinderHeightsAvg10 = np.linspace(0.0, 1.2192, int(N / 10))
 HorizontalCylinderVolume = HorizontalCylinderHeights.copy()
 
 # enumerate makes 2 variables, i is the index, and j is the value inside the vector HorizontalCylinderHeights
@@ -51,6 +51,7 @@ for i, j in enumerate(HorizontalCylinderHeights, start=0):
 CylinderVolumeWithError = CylinderVolume.copy()
 BoxVolumeWithError = BoxVolume.copy()
 HorizontalCylinderWithError = HorizontalCylinderVolume.copy()
+
 
 # a couple of functions for getting the random variation accurate for the given height
 # gets the average mean for that height, it's not the same, there is an offset
@@ -76,28 +77,57 @@ for k2, l2 in enumerate(BoxHeights, start=0):
 for k3, l3 in enumerate(HorizontalCylinderHeights, start=0):
     HorizontalCylinderWithError[k3] = HorizontalCylinderVolume[k3] + np.random.normal(get_mean(l3), get_std_dvt(l3))
 
-
 # Average of 5
 # create the vectors to hold the averages
-Average5Cylinder = np.zeros(int(N/5))
-Average5Box = np.zeros(int(N/5))
-Average5Horizontal = np.zeros(int(N/5))
+Average5Cylinder = np.zeros(int(N / 5))
+Average5Box = np.zeros(int(N / 5))
+Average5Horizontal = np.zeros(int(N / 5))
 
 # get the average for the cylinder tank
 for av_i, av_j in enumerate(Average5Cylinder, start=0):
     Average5Cylinder[av_i] = (CylinderVolumeWithError[av_i] + CylinderVolumeWithError[av_i + 1]
-                             + CylinderVolumeWithError[av_i + 2] + CylinderVolumeWithError[av_i + 3]
-                             + CylinderVolumeWithError[av_i + 4]) / 5
+                              + CylinderVolumeWithError[av_i + 2] + CylinderVolumeWithError[av_i + 3]
+                              + CylinderVolumeWithError[av_i + 4]) / 5
 # get the average for the box tank
 for av_i, av_j in enumerate(Average5Box, start=0):
     Average5Box[av_i] = (BoxVolumeWithError[av_i] + BoxVolumeWithError[av_i + 1]
-                             + BoxVolumeWithError[av_i + 2] + BoxVolumeWithError[av_i + 3]
-                             + BoxVolumeWithError[av_i + 4]) / 5
+                         + BoxVolumeWithError[av_i + 2] + BoxVolumeWithError[av_i + 3]
+                         + BoxVolumeWithError[av_i + 4]) / 5
 # get the average for horizontal tank
 for av_i, av_j in enumerate(Average5Horizontal, start=0):
     Average5Horizontal[av_i] = (HorizontalCylinderWithError[av_i] + HorizontalCylinderWithError[av_i + 1]
-                             + HorizontalCylinderWithError[av_i + 2] + HorizontalCylinderWithError[av_i + 3]
-                             + HorizontalCylinderWithError[av_i + 4]) / 5
+                                + HorizontalCylinderWithError[av_i + 2] + HorizontalCylinderWithError[av_i + 3]
+                                + HorizontalCylinderWithError[av_i + 4]) / 5
+
+# Average of 10
+# create the vectors to hold the averages
+Average10Cylinder = np.zeros(int(N / 10))
+Average10Box = np.zeros(int(N / 10))
+Average10Horizontal = np.zeros(int(N / 10))
+
+# get the average for the cylinder tank
+for av_i, av_j in enumerate(Average10Cylinder, start=0):
+    Average10Cylinder[av_i] = (CylinderVolumeWithError[av_i] + CylinderVolumeWithError[av_i + 1]
+                               + CylinderVolumeWithError[av_i + 2] + CylinderVolumeWithError[av_i + 3]
+                               + CylinderVolumeWithError[av_i + 4] + CylinderVolumeWithError[av_i + 5]
+                               + CylinderVolumeWithError[av_i + 6] + CylinderVolumeWithError[av_i + 7]
+                               + CylinderVolumeWithError[av_i + 8] + CylinderVolumeWithError[av_i + 9]) / 10
+# get the average for the box tank
+for av_i, av_j in enumerate(Average10Box, start=0):
+    Average10Box[av_i] = (BoxVolumeWithError[av_i] + BoxVolumeWithError[av_i + 1]
+                          + BoxVolumeWithError[av_i + 2] + BoxVolumeWithError[av_i + 3]
+                          + BoxVolumeWithError[av_i + 4] + BoxVolumeWithError[av_i + 5]
+                          + BoxVolumeWithError[av_i + 6] + BoxVolumeWithError[av_i + 7]
+                          + BoxVolumeWithError[av_i + 8] + BoxVolumeWithError[av_i + 9]) / 10
+# get the average for horizontal tank
+for av_i, av_j in enumerate(Average10Horizontal, start=0):
+    Average10Horizontal[av_i] = (HorizontalCylinderWithError[av_i] + HorizontalCylinderWithError[av_i + 1]
+                                 + HorizontalCylinderWithError[av_i + 2] + HorizontalCylinderWithError[av_i + 3]
+                                 + HorizontalCylinderWithError[av_i + 4] + HorizontalCylinderWithError[av_i + 5]
+                                 + HorizontalCylinderWithError[av_i + 6] + HorizontalCylinderWithError[av_i + 7]
+                                 + HorizontalCylinderWithError[av_i + 8] + HorizontalCylinderWithError[av_i + 9]) / 10
+
+
 
 # plots
 # Vertical Cylinder plot
@@ -121,7 +151,6 @@ plt.plot(HorizontalCylinderHeights, HorizontalCylinderVolume)
 matplotlib.pyplot.title("Horizontal Cylinder volume")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
-
 
 # plots with random error added
 # Vertical Cylinder with error plot
@@ -166,6 +195,29 @@ matplotlib.pyplot.ylabel("Volume")
 plt.subplot(133)
 plt.plot(HorizontalCylinderHeightsAvg5, Average5Horizontal)
 matplotlib.pyplot.title("Horizontal Cylinder Average of 5")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# plots for the average of 10
+# the cylinder tank
+plt.figure(4)
+plt.subplot(131)
+plt.plot(CylinderHeightsAvg10, Average10Cylinder)
+matplotlib.pyplot.title("Cylinder Average of 10")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Box cylinder with errors
+plt.subplot(132)
+plt.plot(BoxHeightsAvg10, Average10Box)
+matplotlib.pyplot.title("Box Average of 10")
+matplotlib.pyplot.xlabel("Height")
+matplotlib.pyplot.ylabel("Volume")
+
+# Horizontal Cylinder plot
+plt.subplot(133)
+plt.plot(HorizontalCylinderHeightsAvg10, Average10Horizontal)
+matplotlib.pyplot.title("Horizontal Cylinder Average of 10")
 matplotlib.pyplot.xlabel("Height")
 matplotlib.pyplot.ylabel("Volume")
 
